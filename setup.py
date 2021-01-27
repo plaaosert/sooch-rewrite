@@ -12,7 +12,9 @@ setup(
     url="https://github.com/plaaosert/sooch-rewrite/",
     author="Plaaosert and Sooch Devs",
     packages=find_packages(),
-    install_requires=[],
+    install_requires=[
+        "discord.py"
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent"
