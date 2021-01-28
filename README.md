@@ -25,3 +25,7 @@ Rewrite Project for Sooch
 - **[VSCode](https://code.visualstudio.com/download)** - (Requires Python Extension)
 - **[The Discord](https://discord.gg/jNbfCmv)**
 - **[The Rewrite Discord](https://discord.gg/pFZAKhtcMF)**
+
+<!-- You can remove this if you dont need to credit anyone / anything -->
+## Credits
+- TBD
