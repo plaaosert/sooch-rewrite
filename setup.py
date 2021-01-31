@@ -13,7 +13,9 @@ setup(
     author="Plaaosert and Sooch Devs",
     packages=find_packages(),
     install_requires=[
-        "discord.py"
+        "discord.py",
+        "psycopg2-binary",
+        "mysql-connector-python"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
