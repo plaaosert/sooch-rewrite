@@ -10,10 +10,12 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/plaaosert/sooch-rewrite/",
-    author="Plaaosert and Sooch Devs",
+    author="plaaosert and Sooch Devs",
     packages=find_packages(),
     install_requires=[
-        "discord.py"
+        "discord.py",
+        "psycopg2-binary",
+        "mysql-connector-python"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
