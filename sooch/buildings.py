@@ -4,41 +4,95 @@ import math
 # Each building type is stored in a different list but their classes inherit from BaseBuilding.
 
 
-class RegBuilding:
-    id_inc = 0
+class BaseBuilding:
+    base_cost_amp = 0  # which means, "no increase"
 
-    def __init__(self, name, cost, income):
-        self.id = RegBuilding.id_inc
-        RegBuilding.id_inc += 1
+    def __init__(self, name, cost, cost_amp=None):
         self.name = name
         self.cost = int(cost)
-        self.income = int(income)
+        # Some buildings may have steeper cost scaling than others (Black consolidation vial)
+        self.cost_amp = cost_amp if cost_amp else self.__class__.base_cost_amp
 
-    def get_cost(self, original, amount, cost_inc):
+    def get_cost(self, original, amount, cost_inc_divisor):
         """
         Return the amount a user needs to pay to purchase buildings.
 
-        Arguments:
-        original -- The amount of buildings the user originally own
-        amount   -- The amount of buildings to buy
-        cost_inc -- The building cost increase of the player
-        """
-        first_cost = self.cost * (cost_inc ** original)
-        return first_cost * (1 - cost_inc ** amount) / (1 - cost_inc)
+        :param original: The number of buildings the user owns currently
+        :param amount: The number of buildings to buy
+        :param cost_inc_divisor: The building cost multiplier reduction for the player. Should be some float value.
 
-    def get_max_amount(self, original, money, cost_inc):
+        :type original: int
+        :type amount: int
+        :type cost_inc_divisor: float
+        """
+        # Take a shortcut here if base_cost_amp is == 0; we simply return the cost since it never changes.
+        if self.cost_amp == 0:
+            return self.cost * amount
+
+        # For a regular building: (0.2 / divisor) + 1 to get some value 1 < costamp <= 1.2
+        cost_inc = (self.cost_amp / cost_inc_divisor) + 1
+
+        first_cost = self.cost * (cost_inc ** original)
+        return int(first_cost * (1 - cost_inc ** amount) / (1 - cost_inc))
+
+    def get_max_amount(self, original, balance, cost_inc_divisor):
         """
         Return the amount of buildings a user can purchase.
 
-        Arguments:
-        original -- The amount of buildings the user originally own
-        money    -- The amount of Sooch the player has
-        cost_inc -- The building cost increase of the player
+        :param original: The number of buildings the user owns currently
+        :param balance: The current amount of the specific currency the user owns
+        :param cost_inc_divisor: The building cost multiplier reduction for the player. Should be some float value.
+
+        :type original: int
+        :type balance: int
+        :type cost_inc_divisor: float
         """
+        # Take a shortcut here if base_cost_amp is == 0; we simply return the balance divided by the cost.
+        if self.cost_amp == 0:
+            return math.floor(balance / self.cost)
+
+        # For a regular building: (0.2 / divisor) + 1 to get some value 1 < costamp <= 1.2
+        cost_inc = (self.cost_amp / cost_inc_divisor) + 1
+
         first_cost = self.cost * (cost_inc ** original)
-        can_purchase = math.log(
-            money * (cost_inc - 1) / first_cost + 1, cost_inc)
+        can_purchase = math.log(balance * (cost_inc - 1) / first_cost + 1, cost_inc)
         return math.floor(can_purchase)
+
+
+class RegBuilding(BaseBuilding):
+    id_inc = 0
+    # so, 20% increase at base. This is then divided by the player's costamp divisor to get the final costamp.
+    # also, costamp = cost_inc.
+    base_cost_amp = 0.2
+    building_type = "Sooch"
+
+    def __init__(self, name, cost, income, cost_amp=None):
+        # Apply ID for the building object and increment it
+        self.id = self.__class__.id_inc
+        self.__class__.id_inc += 1
+
+        # Set up name and cost from super
+        super().__init__(name, cost, cost_amp)
+
+        # Building-specific attributes
+        self.income = int(income)
+
+
+# example as to how a transcension building would be built
+class TransBuilding(BaseBuilding):
+    id_inc = 0
+    building_type = "Transcension Sooch"
+
+    def __init__(self, name, cost, cost_amp=None):
+        # Apply ID for the building object and increment it
+        self.id = self.__class__.id_inc
+        self.__class__.id_inc += 1
+
+        # Set up name and cost from super
+        super().__init__(name, cost, cost_amp)
+
+        # Building-specific attributes
+        #   lol
 
 
 # Function to set up a lookup table for a list of buildings.
@@ -113,6 +167,17 @@ reg_buildings = [
     RegBuilding("FinalTruth",     1.00e+200, 1.00e+152)
 ]
 
-# This is where the magic happens. Every single permutation of
+# Left for testing purposes for now.
+trans_buildings = [
+    TransBuilding("test-building", 10),
+    TransBuilding("test-building-1.5xcostamp", 10, cost_amp=1.5)
+]
+
+# This is where the magic happens. Every single permutation
 reg_building_lookup = populate_lookup(reg_buildings)
+
 # print("Lookup table generated with {} entries".format(len(reg_building_lookup)))
+# print("{:.3e}".format(trans_buildings[0].get_cost(0, 100, 1.5)))
+# print("{:.3e}".format(trans_buildings[0].get_cost(0, 100, 1.2)))
+# print("{:.3e}".format(trans_buildings[1].get_cost(0, 100, 1.5)))
+# print("{:.3e}".format(trans_buildings[1].get_cost(0, 100, 1.2)))
