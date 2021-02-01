@@ -1,3 +1,5 @@
+import math
+
 # Building definitions.
 # Each building type is stored in a different list but their classes inherit from BaseBuilding.
 
@@ -11,6 +13,32 @@ class RegBuilding:
         self.name = name
         self.cost = int(cost)
         self.income = int(income)
+
+    def get_cost(self, original, amount, cost_inc):
+        """
+        Return the amount a user needs to pay to purchase buildings.
+
+        Arguments:
+        original -- The amount of buildings the user originally own
+        amount   -- The amount of buildings to buy
+        cost_inc -- The building cost increase of the player
+        """
+        first_cost = self.cost * (cost_inc ** original)
+        return first_cost * (1 - cost_inc ** amount) / (1 - cost_inc)
+
+    def get_max_amount(self, original, money, cost_inc):
+        """
+        Return the amount of buildings a user can purchase.
+
+        Arguments:
+        original -- The amount of buildings the user originally own
+        money    -- The amount of Sooch the player has
+        cost_inc -- The building cost increase of the player
+        """
+        first_cost = self.cost * (cost_inc ** original)
+        can_purchase = math.log(
+            money * (cost_inc - 1) / first_cost + 1, cost_inc)
+        return math.floor(can_purchase)
 
 
 # Function to set up a lookup table for a list of buildings.
