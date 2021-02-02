@@ -72,7 +72,7 @@ class SoochBot(discord.Client):
     async def on_guild_join(self, guild):
         await self.guild_join_listener.on_guild_join(guild)
 
-    async def on_message(self, msg):
+    async def on_message(self, msg: discord.Message):
         await message.on_message(self, msg)
 
 

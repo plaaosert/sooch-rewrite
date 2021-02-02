@@ -1,4 +1,26 @@
-from sooch.command import InvalidCommand, CreditsCommand
+from typing import Callable, Optional
+
+import discord
+from sooch.commands import misc
+
+
+class Command:
+    def __init__(self,
+                 handler: Callable[[discord.Client, str, list[str]],
+                                   Optional[discord.Embed]],
+                 name: str = "s!invalid",
+                 description: str = "No description provided",
+                 syntax: Optional[str] = None,
+                 aliases: list[str] = []):
+        self.name = name
+        self.aliases = aliases
+        self.description = description
+        self.syntax = syntax
+        self.handler = handler
+        if syntax is None:
+            # Default to just the name if it's not provided.
+            self.syntax = self.name
+
 
 valid_prefix = {
     "s!": True,
@@ -8,12 +30,16 @@ valid_prefix = {
 
 
 commands = {
-    "s!credits": CreditsCommand()
+    "s!credits": Command(
+        name="s!credits",
+        description="Show all the people that helped make Sooch a reality",
+        handler=misc.credits
+    )
 }
-invalid_command = InvalidCommand()
+invalid_command = Command(handler=misc.invalid)
 
 
-async def on_message(client, message):
+async def on_message(client: discord.Client, message: discord.Message):
     if message.author.bot:
         # Ignore all bot messages.
         return
@@ -22,10 +48,17 @@ async def on_message(client, message):
         # If it's not, ignore the message.
         return
 
+    if message.content[:2] == "s.":
+        # TODO: Check for server admin
+        pass
+    elif message.content[:2] == "s$":
+        # TODO: Check for bot admin
+        pass
+
     content = message.content.split(" ")
     command = commands.get(content[0], invalid_command)
-    to_send = await command.handle(client, message, content)
-    if not to_send is None:
+    to_send = await command.handler(client, message, content)
+    if to_send is not None:
         to_send.title = content[0]
         to_send.description = "Requested by {}".format(message.author.mention)
         await message.channel.send(embed=to_send)
