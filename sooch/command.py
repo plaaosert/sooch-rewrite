@@ -25,3 +25,22 @@ class InvalidCommand(Command):
                 command),
             inline=False)
         return embed
+
+
+class CreditsCommand(Command):
+    def __init__(self):
+        super().__init__("s!credits",
+                         "Show all the people that helped make Sooch a reality", "s!credits")
+        self.credits_embed = discord.Embed()
+        with open("./credits.txt", "r", encoding="utf-8") as credits_file:
+            credits_text = credits_file.read()
+            for field_data in credits_text.split("\n\n===\n\n"):
+                field = field_data.split("\n", maxsplit=1)
+                self.credits_embed.add_field(
+                    name=field[0],
+                    value=field[1],
+                    inline=True,
+                )
+
+    async def handle(self, client, message, content):
+        return self.credits_embed

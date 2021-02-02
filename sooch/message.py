@@ -1,4 +1,4 @@
-from sooch.command import InvalidCommand
+from sooch.command import InvalidCommand, CreditsCommand
 
 valid_prefix = {
     "s!": True,
@@ -8,6 +8,7 @@ valid_prefix = {
 
 
 commands = {
+    "s!credits": CreditsCommand()
 }
 invalid_command = InvalidCommand()
 
