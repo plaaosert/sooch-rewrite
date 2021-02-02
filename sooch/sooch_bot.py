@@ -5,6 +5,7 @@ import sys
 
 import discord
 
+from sooch import message
 from sooch.database import Database
 from sooch.listeners import GuildJoinListener, ReadyListener
 from sooch.servers import Servers
@@ -14,7 +15,8 @@ from logging import StreamHandler, Formatter, DEBUG
 
 class SoochBot(discord.Client):
     def __init__(self):
-        formatter = Formatter("%(asctime)s:%(levelname)s:%(name)s: %(message)s")
+        formatter = Formatter(
+            "%(asctime)s:%(levelname)s:%(name)s: %(message)s")
         file_handler = TimedRotatingFileHandler(
             filename="sooch.log",
             when="midnight",
@@ -69,6 +71,9 @@ class SoochBot(discord.Client):
 
     async def on_guild_join(self, guild):
         await self.guild_join_listener.on_guild_join(guild)
+
+    async def on_message(self, msg):
+        await message.on_message(self, msg)
 
 
 def main():
