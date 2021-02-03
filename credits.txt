@@ -1,0 +1,56 @@
+Main Man
+**@plaaosert#1984**. he programmed it, with a TON of help from the:
+
+===
+
+Special Helpy Boyes
+**@Good RumbleFish#1650** - was one of the first people to gain sooch and the founder of s!build coremine max.
+
+**@xavrr#9975** - also a first, and was very helpful with testing max and min amounts of Sooch. Had the ideas for numerous commands and features.
+
+**@Xoretra#2601** - gave me more bug reports than an insect exterminator. 'beep boop'.
+
+===
+
+Special Helpy Boyes part 2: the second one
+**@ziul123#4197** - s!eat max.
+
+**@CharlieSad#0400** - basically forced me to redesign the user creation system from the ground up. thanks >:]
+
+**@iTs jUsT sOdiUm cHLoRidE#4096** - man hes the creator of the whole thing just look at his profile picture
+
+**@Magicboten#0780** - set up the Sphere, which was where the :bricks: bot was first concieved.
+
+**@zaop#0003** - really helpful for the technical side of things; prevented me from exploding while making databases work.
+
+===
+
+Special Helpy Boyes: The Reboot 20 Years Afterwards
+**@Boggy#7863** - made some really good and nice gif images for all the commands. really good guy. he makes games.
+
+===
+
+Warren Teitelman
+For being one of the first to bring Undo/Redo to computers. You have saved me so many times.
+
+===
+
+the Clockwork Sphere and Plaomoji
+All of you guys who tested the bot on these servers were so helpful, not only in gathering bug reports, but in just motivating me to actually finish this monstrosity. Thanks, all of you.
+
+===
+
+Other Helpy Boyes
+people who helped after the bot was released:
+
+**@'̏̏̏Barinho#9961** - gave me a lot of bug reports, and harassed me whenever the bot was down. Thanks.
+
+===
+
+Open Source Folks
+This bot is currently open source on [GitHub](https://github.com/plaaosert/sooch-rewrite).
+
+===
+
+why are you here
+go farm some more sooch
