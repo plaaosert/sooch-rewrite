@@ -1,25 +1,22 @@
+"""
+Handles incoming messages and dispatches them to the appropriate handler.
+"""
+from dataclasses import dataclass, field
 from typing import Callable, Optional
 
 import discord
 from sooch.commands import misc
 
 
+@dataclass
 class Command:
-    def __init__(self,
-                 handler: Callable[[discord.Client, str, list[str]],
-                                   Optional[discord.Embed]],
-                 name: str = "s!invalid",
-                 description: str = "No description provided",
-                 syntax: Optional[str] = None,
-                 aliases: list[str] = []):
-        self.name = name
-        self.aliases = aliases
-        self.description = description
-        self.syntax = syntax
-        self.handler = handler
-        if syntax is None:
-            # Default to just the name if it's not provided.
-            self.syntax = self.name
+    """Class representing a command that can be executed."""
+    handler: Callable[[discord.Client, str, list[str]],
+                      Optional[discord.Embed]]
+    name: str = "s!invalid"
+    description: str = "No description provided"
+    syntax: Optional[str] = None
+    aliases: list[str] = field(default_factory=list[str])
 
 
 valid_prefix = {

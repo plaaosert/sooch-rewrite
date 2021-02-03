@@ -1,3 +1,10 @@
+"""
+Contain models for server-specific information such as its name and
+server boosts.
+"""
+from dataclasses import dataclass
+
+
 class Servers:
     """Wrap around a SQL database and return servers."""
 
@@ -35,8 +42,9 @@ class Servers:
         self.database.connection.commit()
 
 
+@dataclass
 class Server:
-    def __init__(self, discord_id, name, command_prefix):
-        self.discord_id = discord_id
-        self.name = name
-        self.command_prefix = command_prefix
+    """Represent an instance of a guild in Discord."""
+    discord_id: int
+    name: str
+    command_prefix: str = "s!"
