@@ -46,10 +46,10 @@ class Database:
         self.logger.info("Running migrations")
         migration_steps = [
             """
-            create table if not exists `server`(
-                `discord_id` bigint primary key,
-                `name` varchar(256),
-                `command_prefix` varchar(32)
+            CREATE TABLE IF NOT EXISTS `server`(
+                `discord_id` BIGINT PRIMARY KEY,
+                `name` VARCHAR(256),
+                `command_prefix` VARCHAR(32)
             );
             """
         ]
@@ -59,15 +59,15 @@ class Database:
         logging.info("Ensuring migrations table exists")
         cursor.execute(
             """
-            create table if not exists `migration`(
-                `migration_id` int primary key
+            CREATE TABLE IF NOT EXISTS `migration`(
+                `migration_id` INT PRIMARY KEY
             );
             """
         )
         self.connection.commit()
         logging.info("Querying migrations")
         cursor.execute(
-            "select `migration_id` from `migration`;"
+            "SELECT `migration_id` FROM `migration`;"
         )
         rows = cursor.fetchall()
         migrations_run = [row[0] for row in rows]
@@ -75,9 +75,9 @@ class Database:
             if i not in migrations_run:
                 self.logger.info("Running migration %d", i)
                 cursor.execute(migration_step)
-                cursor.execute("insert into `migration`(`migration_id`) values(?)", (i,))
+                cursor.execute(
+                    "INSERT INTO `migration` (`migration_id`) VALUES(?)",
+                    (i,))
                 self.connection.commit()
             else:
                 self.logger.info("Skipping migration %d, already run.", i)
-
-
