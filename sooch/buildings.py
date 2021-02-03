@@ -18,7 +18,8 @@ class BaseBuilding:
         # An example is: Black consolidation vial
         self.cost_amp = cost_amp if cost_amp else self.__class__.base_cost_amp
 
-    def get_cost(self, original, amount, cost_inc_divisor):
+    def get_cost(self,
+                 original: int, amount: int, cost_inc_divisor: float) -> int:
         """
         Return the amount a user needs to pay to purchase buildings.
 
@@ -40,7 +41,9 @@ class BaseBuilding:
         first_cost = self.cost * (cost_inc ** original)
         return int(first_cost * (1 - cost_inc ** amount) / (1 - cost_inc))
 
-    def get_max_amount(self, original, balance, cost_inc_divisor):
+    def get_max_amount(self,
+                       original: int, balance: int,
+                       cost_inc_divisor: float) -> int:
         """
         Return the amount of buildings a user can purchase.
 
@@ -77,7 +80,9 @@ class RegBuilding(BaseBuilding):
     base_cost_amp = 0.2
     building_type = "Sooch"
 
-    def __init__(self, name, cost, income, cost_amp=None):
+    def __init__(self,
+                 name: str, cost: int, income: int,
+                 cost_amp: Optional[float] = None):
         # Apply ID for the building object and increment it
         self.id = self.__class__.id_inc
         self.__class__.id_inc += 1
@@ -97,7 +102,8 @@ class TransBuilding(BaseBuilding):
     id_inc = 0
     building_type = "Transcension Sooch"
 
-    def __init__(self, name, cost, cost_amp=None):
+    def __init__(self,
+                 name: str, cost: int, build_limit: Optional[int] = None):
         # Apply ID for the building object and increment it
         self.id = self.__class__.id_inc
         self.__class__.id_inc += 1
@@ -106,7 +112,8 @@ class TransBuilding(BaseBuilding):
         super().__init__(name, cost, cost_amp=None)
 
         # Building-specific attributes
-        #   lol
+        self.build_limit = build_limit
+
 
 def populate_lookup(original: list[BaseBuilding]) -> dict[str, BaseBuilding]:
     """
