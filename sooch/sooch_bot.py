@@ -12,9 +12,8 @@ from logging import StreamHandler, Formatter, DEBUG
 
 import discord
 
-from sooch import message
+from sooch import listeners, message
 from sooch.database import Database
-from sooch.listeners import GuildJoinListener, ReadyListener
 from sooch.servers import Servers
 
 
@@ -79,10 +78,12 @@ class SoochBot(discord.Client):
         self.run(self.config["token"])
 
     async def on_ready(self):
-        await self.ready_listener.on_ready(self)
+        """Prepare the SoochBot to serve commands when it connects."""
+        await listeners.on_ready(self, self.servers)
 
     async def on_guild_join(self, guild):
-        await self.guild_join_listener.on_guild_join(guild)
+        """Register the guild that just joined if necessary."""
+        await listeners.on_guild_join(self.servers, guild)
 
     async def on_message(self, msg: discord.Message):
         """Handle messages that are command and ignore others."""
