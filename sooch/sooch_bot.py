@@ -12,7 +12,7 @@ from logging import StreamHandler, Formatter, DEBUG
 
 import discord
 
-from sooch import listeners, message
+from sooch import listeners, message, path
 from sooch.database import Database
 from sooch.servers import Servers
 
@@ -23,8 +23,9 @@ class SoochBot(discord.Client):
     def __init__(self):
         formatter = Formatter(
             "%(asctime)s:%(levelname)s:%(name)s: %(message)s")
+        log_path = path.from_root("sooch.log")
         file_handler = TimedRotatingFileHandler(
-            filename="sooch.log",
+            filename=log_path,
             when="midnight",
             backupCount=14,
             encoding="utf-8",
@@ -53,25 +54,29 @@ class SoochBot(discord.Client):
         necessary.
         """
         self.save_default_config()
-        with open("./config.json", "r", encoding="utf-8") as config_file:
+        config_path = path.from_root("config.json")
+        with open(config_path, "r", encoding="utf-8") as config_file:
             config_text = config_file.read()
             return json.loads(config_text)
 
-    @staticmethod
-    def save_default_config():
+    def save_default_config(self):
         """
         Save the default config file at the expected location if it
         does not exist.
         """
-        if not os.path.isfile("./config.json"):
-            with open("./config.json", "w", encoding="utf-8") as config_file:
+        config_path = path.from_root("config.json")
+        if not os.path.isfile(config_path):
+            with open(config_path, "w", encoding="utf-8") as config_file:
                 config_file.writelines(json.dumps({
                     "token": "",
                     "database": {
                         "type": "sqlite",
                         "file": "./sooch.db"
                     }
-                }))
+                }, indent=4))
+            self.logger.info(
+                "Config file has been created. Please fill in the token.")
+            sys.exit()
 
     def start_sooching(self):
         """Start the bot with the token present in the config."""
