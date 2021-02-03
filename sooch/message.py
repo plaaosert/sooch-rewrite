@@ -1,7 +1,7 @@
 from typing import Callable, Optional
+from sooch.commands import *
 
 import discord
-from sooch.commands import misc
 
 
 class Command:
@@ -11,7 +11,7 @@ class Command:
                  name: str = "s!invalid",
                  description: str = "No description provided",
                  syntax: Optional[str] = None,
-                 aliases: list[str] = []):
+                 aliases: list[str] = ["None"]):
         self.name = name
         self.aliases = aliases
         self.description = description
@@ -34,6 +34,12 @@ commands = {
         name="s!credits",
         description="Show all the people that helped make Sooch a reality",
         handler=misc.credits
+    ),
+    "s!help": Command(
+        name="s!help",
+        description="Get help.",
+        aliases=["s!h"],
+        handler=help.help
     )
 }
 invalid_command = Command(handler=misc.invalid)
