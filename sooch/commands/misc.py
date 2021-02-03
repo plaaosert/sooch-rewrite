@@ -1,5 +1,6 @@
 from typing import Optional
 
+from sooch import path
 import discord
 
 
@@ -19,7 +20,8 @@ async def invalid(client: discord.Client,
     return embed
 
 credits_embed = discord.Embed()
-with open("./credits.txt", "r", encoding="utf-8") as credits_file:
+credits_path = path.from_root("credits.txt")
+with open(credits_path, "r", encoding="utf-8") as credits_file:
     credits_text = credits_file.read()
     for field_data in credits_text.split("\n\n===\n\n"):
         field = field_data.split("\n", maxsplit=1)

@@ -6,6 +6,8 @@ import sys
 import mysql.connector
 import psycopg2
 
+from sooch import path
+
 
 class Database:
     """An instance of database the bot can communicate with."""
@@ -33,7 +35,9 @@ class Database:
             )
         elif db_type == "sqlite":
             self.logger.info("Connecting to sqlite")
-            self.connection = sqlite3.connect(db_config["file"])
+
+            db_file_path = path.from_root(db_config["file"])
+            self.connection = sqlite3.connect(db_file_path)
         else:
             self.connection = None
             self.logger.error("Invalid database type %s",
