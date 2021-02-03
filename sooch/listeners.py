@@ -1,3 +1,4 @@
+"""Implement listeners for all the events SoochBot cares about."""
 import logging
 
 from sooch.servers import Server

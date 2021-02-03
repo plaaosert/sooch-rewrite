@@ -1,7 +1,14 @@
+"""
+The entry point of SoochBot. Initializes all components and starts handling
+commands when start_sooching() is called.
+"""
+
 import json
 import logging
 import os
 import sys
+from logging.handlers import TimedRotatingFileHandler
+from logging import StreamHandler, Formatter, DEBUG
 
 import discord
 
@@ -9,11 +16,11 @@ from sooch import message
 from sooch.database import Database
 from sooch.listeners import GuildJoinListener, ReadyListener
 from sooch.servers import Servers
-from logging.handlers import TimedRotatingFileHandler
-from logging import StreamHandler, Formatter, DEBUG
 
 
 class SoochBot(discord.Client):
+    """Represent an instance of SoochBot."""
+
     def __init__(self):
         formatter = Formatter(
             "%(asctime)s:%(levelname)s:%(name)s: %(message)s")
@@ -38,17 +45,25 @@ class SoochBot(discord.Client):
         self.config = self.load_config()
         self.database = Database(self.config)
         self.servers = Servers(self.database)
-        self.ready_listener = ReadyListener(self.servers)
-        self.guild_join_listener = GuildJoinListener(self.servers)
-        super().__init__(command_prefix=self.get_server_prefix)
+
+        super().__init__()
 
     def load_config(self):
+        """
+        Load configs from a config file, generating the default one if
+        necessary.
+        """
         self.save_default_config()
         with open("./config.json", "r", encoding="utf-8") as config_file:
             config_text = config_file.read()
             return json.loads(config_text)
 
-    def save_default_config(self):
+    @staticmethod
+    def save_default_config():
+        """
+        Save the default config file at the expected location if it
+        does not exist.
+        """
         if not os.path.isfile("./config.json"):
             with open("./config.json", "w", encoding="utf-8") as config_file:
                 config_file.writelines(json.dumps({
@@ -59,11 +74,8 @@ class SoochBot(discord.Client):
                     }
                 }))
 
-    async def get_server_prefix(self, bot, message):
-        server = await self.servers.get_server(message.guild_id)
-        return server.command_prefix
-
     def start_sooching(self):
+        """Start the bot with the token present in the config."""
         self.run(self.config["token"])
 
     async def on_ready(self):
@@ -73,10 +85,12 @@ class SoochBot(discord.Client):
         await self.guild_join_listener.on_guild_join(guild)
 
     async def on_message(self, msg: discord.Message):
+        """Handle messages that are command and ignore others."""
         await message.on_message(self, msg)
 
 
 def main():
+    """Create an instance of SoochBot and start it."""
     sooch_bot = SoochBot()
     sooch_bot.start_sooching()
 

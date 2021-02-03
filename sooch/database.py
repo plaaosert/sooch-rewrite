@@ -1,38 +1,48 @@
+"""Module that allows for interaction with the database."""
 import logging
 import sqlite3
+import sys
 
 import mysql.connector
 import psycopg2
 
 
 class Database:
+    """An instance of database the bot can communicate with."""
+
     def __init__(self, config):
         self.logger = logging.getLogger("sooch")
         self.logger.info("Initializing database")
-        if config["database"]["type"] == "postgres":
+
+        db_config = config["database"]
+        db_type = db_config["type"]
+
+        if db_type == "postgres":
             self.logger.info("Connecting to postgres")
             self.connection = psycopg2.connect(
-                url=config["database"]["url"],
-                username=config["database"]["username"],
-                password=config["database"]["password"]
+                url=db_config["url"],
+                username=db_config["username"],
+                password=db_config["password"]
             )
-        elif config["database"]["type"] == "mysql":
+        elif db_type == "mysql":
             self.logger.info("Connecting to mysql")
             self.connection = mysql.connector.connect(
-                url=config["database"]["url"],
-                username=config["database"]["username"],
-                password=config["database"]["password"]
+                url=db_config["url"],
+                username=db_config["username"],
+                password=db_config["password"]
             )
-        elif config["database"]["type"] == "sqlite":
+        elif db_type == "sqlite":
             self.logger.info("Connecting to sqlite")
-            self.connection = sqlite3.connect(config["database"]["file"])
+            self.connection = sqlite3.connect(db_config["file"])
         else:
             self.connection = None
-            self.logger.error("Invalid database type %s", config["database"]["type"])
-            exit()
+            self.logger.error("Invalid database type %s",
+                              config["database"]["type"])
+            sys.exit()
         self.migrate()
 
     def migrate(self):
+        """Migrate the database as necessary."""
         self.logger.info("Running migrations")
         migration_steps = [
             """
@@ -44,7 +54,8 @@ class Database:
             """
         ]
         cursor = self.connection.cursor()
-        # This is run outside of the migrations since it needs to exist to query what migrations need to be run
+        # This is run outside of the migrations since it needs to exist to
+        # query what migrations need to be run.
         logging.info("Ensuring migrations table exists")
         cursor.execute(
             """

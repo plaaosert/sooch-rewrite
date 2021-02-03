@@ -1,8 +1,11 @@
 class Servers:
+    """Wrap around a SQL database and return servers."""
+
     def __init__(self, database):
         self.database = database
 
-    async def get_server(self, discord_id):
+    async def get_server(self, discord_id: int) -> "Server":
+        """Return the server info associated with the ID requested"""
         cursor = self.database.connection.cursor()
         cursor.execute(
             "select `name`, `command_prefix` from `server` where `discord_id` = ?",

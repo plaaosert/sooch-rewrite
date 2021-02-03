@@ -40,6 +40,10 @@ invalid_command = Command(handler=misc.invalid)
 
 
 async def on_message(client: discord.Client, message: discord.Message):
+    """
+    Handle incoming messages from Discord, dispatching it to commands/invalid
+    command handler if necessary
+    """
     if message.author.bot:
         # Ignore all bot messages.
         return
