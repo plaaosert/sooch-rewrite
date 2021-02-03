@@ -1,11 +1,22 @@
+"""
+Contain models for server-specific information such as its name and
+server boosts.
+"""
+from dataclasses import dataclass
+
+
 class Servers:
+    """Wrap around a SQL database and return servers."""
+
     def __init__(self, database):
         self.database = database
 
-    async def get_server(self, discord_id):
+    async def get_server(self, discord_id: int) -> "Server":
+        """Return the server info associated with the ID requested"""
         cursor = self.database.connection.cursor()
         cursor.execute(
-            "select `name`, `command_prefix` from `server` where `discord_id` = ?",
+            ("SELECT `name`, `command_prefix` FROM `server` "
+             "WHERE `discord_id` = ?"),
             (discord_id,)
         )
         row = cursor.fetchone()
@@ -19,17 +30,21 @@ class Servers:
             row[1]
         )
 
-    async def add_server(self, server):
+    async def add_server(self, server: "Server"):
+        """Add the provided server into the database"""
         cursor = self.database.connection.cursor()
         cursor.execute(
-            "insert into `server`(`discord_id`, `name`, `command_prefix`) values(?, ?, ?)",
+            ("INSERT INTO `server`"
+             "(`discord_id`, `name`, `command_prefix`)"
+             "VALUES(?, ?, ?)"),
             (server.discord_id, server.name, server.command_prefix)
         )
         self.database.connection.commit()
 
 
+@dataclass
 class Server:
-    def __init__(self, discord_id, name, command_prefix):
-        self.discord_id = discord_id
-        self.name = name
-        self.command_prefix = command_prefix
+    """Represent an instance of a guild in Discord."""
+    discord_id: int
+    name: str
+    command_prefix: str = "s!"
