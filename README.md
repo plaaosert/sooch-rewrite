@@ -18,13 +18,13 @@ Rewrite Project for Sooch
 
 ## Contributing
 - To Contribute, Fork this project and open a Pull-Request
-- PEP8 format, i.e, `variable_name`, `function_name` and `ClassName`
+- PEP8 format is encouraged - most importantly, `variable_name`, `function_name` and `ClassName`
 
 ## Resources
 - **[PyCharm](https://www.jetbrains.com/pycharm/download/)** - (Community Edition is Free)
 - **[VSCode](https://code.visualstudio.com/download)** - (Requires Python Extension)
-- **[The Discord](https://discord.gg/jNbfCmv)**
-- **[The Rewrite Discord](https://discord.gg/pFZAKhtcMF)**
+- **[Main Sooch Discord](https://discord.gg/jNbfCmv)**
+- **[Rewrite Discord](https://discord.gg/pFZAKhtcMF)**
 
 <!-- You can remove this if you dont need to credit anyone / anything -->
 ## Credits
