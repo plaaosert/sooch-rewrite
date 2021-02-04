@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Optional
 
 import discord
-from sooch.commands import misc
+from sooch.commands import misc, help
 
 
 @dataclass
@@ -31,9 +31,17 @@ commands = {
         name="s!credits",
         description="Show all the people that helped make Sooch a reality",
         handler=misc.credits
+    ),
+    "s!help": Command(
+        name="s!help",
+        description="Get help",
+        aliases=["s!h"],
+        syntax="s!help <command>",
+        handler=help.help_command
     )
 }
 invalid_command = Command(handler=misc.invalid)
+help.populate_help_embeds(commands)
 
 
 async def on_message(client: discord.Client, message: discord.Message):
