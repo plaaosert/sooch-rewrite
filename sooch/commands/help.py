@@ -15,10 +15,10 @@ def populate_help_embeds(commands: dict[str, any]):
         aliases = ' '.join(command.aliases) or "None"
 
         embed_text = ("Description: *{}*"
-                      "\n Aliases: *{}*"
-                      "\n Syntax: *{}*").format(command.description,
-                                                aliases,
-                                                command.syntax)
+                      "\nAliases: *{}*"
+                      "\nSyntax: *{}*").format(command.description,
+                                               aliases,
+                                               command.syntax)
 
         help_embeds[command_name] = discord.Embed().add_field(
             name="Help for `{}`".format(command_name),
