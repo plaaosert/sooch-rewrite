@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Optional
 
 import discord
-from sooch.commands import misc
+from sooch.commands import base, misc
 
 
 @dataclass
@@ -31,7 +31,12 @@ commands = {
         name="s!credits",
         description="Show all the people that helped make Sooch a reality",
         handler=misc.credits
-    )
+    ),
+    "s!claim": Command(
+        name="s!claim",
+        description="Claim the hard-made sooch your buildings made",
+        handler=base.claim
+    ),
 }
 invalid_command = Command(handler=misc.invalid)
 

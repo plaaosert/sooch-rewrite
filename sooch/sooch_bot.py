@@ -13,7 +13,10 @@ from logging import StreamHandler, Formatter, DEBUG
 import discord
 
 from sooch import listeners, message, path
+from sooch.commands import base
 from sooch.database import Database
+from sooch.services.players import Players
+from sooch.services.reg_buildings import RegBuildings
 from sooch.services.servers import Servers
 
 
@@ -49,6 +52,8 @@ class SoochBot(discord.Client):
 
         # Initialize all the other modules.
         listeners.servers = Servers(self.database)
+        base.player_svc = Players(self.database)
+        base.reg_buildings_svc = RegBuildings(self.database)
 
         super().__init__()
 
