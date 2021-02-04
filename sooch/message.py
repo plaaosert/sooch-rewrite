@@ -30,7 +30,7 @@ commands = {
     "s!credits": Command(
         name="s!credits",
         description="Show all the people that helped make Sooch a reality",
-        handler=misc.credits
+        handler=misc.credits_command
     ),
     "s!claim": Command(
         name="s!claim",
