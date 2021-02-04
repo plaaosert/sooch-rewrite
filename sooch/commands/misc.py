@@ -20,7 +20,7 @@ async def invalid(client: discord.Client,
     return embed
 
 credits_embed = discord.Embed()
-credits_path = path.from_root("sooch/embeds/credits.txt")
+credits_path = path.from_root("resources/embeds/credits.txt")
 with open(credits_path, "r", encoding="utf-8") as credits_file:
     credits_text = credits_file.read()
     for field_data in credits_text.split("\n\n===\n\n"):

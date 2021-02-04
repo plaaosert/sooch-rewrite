@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Optional
 
 import discord
-from sooch.commands import *
+from sooch.commands import misc, help
 
 
 @dataclass
@@ -37,10 +37,11 @@ commands = {
         description="Get help",
         aliases=["s!h"],
         syntax="s!help <command>",
-        handler=help.help
+        handler=help.help_command
     )
 }
 invalid_command = Command(handler=misc.invalid)
+help.populate_help_embeds(commands)
 
 
 async def on_message(client: discord.Client, message: discord.Message):

@@ -3,66 +3,67 @@ from typing import Optional
 import discord
 import sooch.message as msg
 
-# Keeping this file separate from misc.py as a future "guide" command could be implemented
-# (as well as other server, inventory and trade help commands)
+# Preload all help embeds
+help_embeds: dict[str, discord.Embed] = {}
 
 
-# Help embeds will be cached into memory for faster access
-cached_embeds = {}
+def populate_help_embeds(commands: dict[str, any]):
+    default_text = ""
 
+    for command_name, command in commands.items():
+        # Create joined aliases for help embeds and the default embed
+        aliases = ' '.join(command.aliases) or "None"
 
-def set_default_text():
-    # Checks if "default is already assigned
-    # This function is used to prevent circle importing
-    if not "default" in cached_embeds.keys():
-        # Caches the default embed
-        cached_embeds["default"] = "\n".join(
+        embed_text = ("Description: *{}*"
+                      "\n Aliases: *{}*"
+                      "\n Syntax: *{}*").format(command.description,
+                                                aliases,
+                                                command.syntax)
 
-            # Basically iterates through commands and hell knows what
-            # tl;dr: it works
-            map(lambda
-                    t: f"`{t}` *or* `{''.join(msg.commands.get(t).aliases) if msg.commands.get(t).aliases else 'None'}`",
-                msg.commands)
+        help_embeds[command_name] = discord.Embed().add_field(
+            name="Help for `{}`".format(command_name),
+            value=embed_text,
+            inline=True
         )
 
-    return cached_embeds.get("default")
+        # This type of help text works for now
+        # Once all features have been implemented, we can rework the help embed
+        default_text += "`{}` *or* `{}`\n".format(command_name, aliases)
+
+    # Set the default text after setting all the help texts
+    help_embeds["default"] = discord.Embed().add_field(name="Help", value=default_text, inline=True)
 
 
-# Ignore warning for now
-async def help(client: discord.Client,
-               message: discord.Message,
-               content: list[str]) -> Optional[discord.Embed]:
+async def help_command(client: discord.Client,
+                       message: discord.Message,
+                       content: list[str]) -> Optional[discord.Embed]:
     # Initialize the embed + parsed arguments
     embed = discord.Embed()
-    args = None
+    help_command_arguments = None
 
     # Checks if there are any arguments
     if not content[1:]:
-        embed.add_field(name="Help", value=set_default_text(), inline=True)
+        embed = help_embeds.get("default")
 
-    # Parses content so that it removes the "s!" if it exists
+    # Adds "s!" to the beginning if it is not there
     else:
-        args = content[1] if not content[1].startswith("s!") else content[1][2:]
+        help_command_arguments = content[1] if content[1].startswith("s!") else "s!" + content[1]
 
     # Otherwise check if the argument is valid and that there is only one argument
-    if args in map(lambda cmd: cmd[2:], list(msg.commands.keys())) and not content[2:]:
-
-        # Check if embed already exists in cache
-        # If not, add it to the cache with key content[1]
-        if not args in cached_embeds.keys():
-            cached_embeds[args] = f"\n Description: *{msg.commands.get('s!' + args).description}* \n " \
-                                  f"Aliases: *{''.join(msg.commands.get('s!' + args).aliases) if msg.commands.get('s!' + args).aliases else 'None'}* \n " \
-                                  f"Syntax: *{msg.commands.get('s!' + args).syntax}* \n"
-
-        embed.add_field(name=f"Getting help on `s!{args}`", value=cached_embeds.get(args), inline=True)
+    if help_command_arguments in help_embeds.keys() and not content[2:]:
+        embed = help_embeds.get(help_command_arguments)
 
     # If all fails, send error message
-    elif args:
-        embed.add_field(name="Invalid Arguments",
-                        value=f"`{content[1]}` is not a real command" if not content[
-                                                                             2:] else "Provided mutliple arguments - Only 1 is required",
-                        inline=True)
+    elif help_command_arguments:
+        embed.add_field(
+            name="Invalid Arguments",
+            value="`{}` is an invalid command \n\n"
+                  "Correct syntax: `s!help <command>`".format(' '.join(content[1:])),
+            inline=True
+        )
+
         embed.set_footer(
-            text="If you think this is an error, please contact the devs or submit a bug report with s!report")
+            text="If you think this is an error, please contact the devs or submit a bug report with s!report"
+        )
 
     return embed

@@ -1,4 +1,4 @@
-"""Contain class and method that allows for manipulation of player data."""
+"""Contain class and method that allows for manipulation of player resources."""
 from typing import Tuple
 
 
@@ -23,16 +23,16 @@ class Player:
         # players always have the same values for income and similar, they can
         # be initialised using constants.
         if initialise:
-            # Initialise the data.
+            # Initialise the resources.
             pass
         else:
-            # Read from the provided data.
+            # Read from the provided resources.
             pass
 
     @classmethod
     def from_loaded_data(cls, data):
         """
-        Take in raw data loaded from the database, applies preprocessing as
+        Take in raw resources loaded from the database, applies preprocessing as
         necessary and passes it into the constructor.
         """
         # -- preprocessing goes here --

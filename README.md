@@ -12,7 +12,7 @@
 ## Project Structure
 - `sooch/` is the root folder of the bot where most code resides.
 - `sooch/commands/` is the folder where implementation of commands reside.
-- `sooch/embeds/` is the folder where pre-written embeds reside.
+- `resources/embeds/` is the folder where pre-written embeds reside.
 
 ## Contributing
 - To contribute, fork this project and open a pull-request.
