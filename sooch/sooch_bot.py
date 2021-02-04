@@ -14,7 +14,7 @@ import discord
 
 from sooch import listeners, message, path
 from sooch.database import Database
-from sooch.servers import Servers
+from sooch.services.servers import Servers
 
 
 class SoochBot(discord.Client):
@@ -42,9 +42,13 @@ class SoochBot(discord.Client):
         discord_logger.setLevel(DEBUG)
         discord_logger.addHandler(stream_handler)
         discord_logger.addHandler(file_handler)
+
+        # Read from config.
         self.config = self.load_config()
         self.database = Database(self.config)
-        self.servers = Servers(self.database)
+
+        # Initialize all the other modules.
+        listeners.servers = Servers(self.database)
 
         super().__init__()
 
@@ -84,11 +88,11 @@ class SoochBot(discord.Client):
 
     async def on_ready(self):
         """Prepare the SoochBot to serve commands when it connects."""
-        await listeners.on_ready(self, self.servers)
+        await listeners.on_ready(self)
 
     async def on_guild_join(self, guild):
         """Register the guild that just joined if necessary."""
-        await listeners.on_guild_join(self.servers, guild)
+        await listeners.on_guild_join(guild)
 
     async def on_message(self, msg: discord.Message):
         """Handle messages that are command and ignore others."""

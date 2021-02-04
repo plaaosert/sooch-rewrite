@@ -52,8 +52,7 @@ class Database:
             """
             CREATE TABLE IF NOT EXISTS `server`(
                 `discord_id` BIGINT PRIMARY KEY,
-                `name` VARCHAR(256),
-                `command_prefix` VARCHAR(32)
+                `name` VARCHAR(256)
             );
             """
         ]
