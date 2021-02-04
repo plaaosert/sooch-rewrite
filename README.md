@@ -10,8 +10,9 @@
 3. Run `python3 sooch/sooch_bot.py` to launch the bot.
 
 ## Project Structure
-1. `sooch/` is the main folder of the bot where most code resides.
-2. `sooch/commands/` is the folder where implementation of commands reside.
+- `sooch/` is the root folder of the bot where most code resides.
+- `sooch/commands/` is the folder where implementation of commands reside.
+- `resources/embeds/` is the folder where pre-written embeds reside.
 
 ## Contributing
 - To contribute, fork this project and open a pull-request.
