@@ -1,12 +1,19 @@
+"""
+Module that contains miscellaneous command irrelevant to the progression of
+the player.
+"""
 from typing import Optional
 
-from sooch import path
 import discord
+
+from sooch import path
 
 
 async def invalid(client: discord.Client,
                   message: discord.Message,
                   content: list[str]) -> Optional[discord.Embed]:
+    """Handle all invalid command with Sooch prefixes."""
+    del client, message
     command = content[0]
 
     embed = discord.Embed()
@@ -32,7 +39,9 @@ with open(credits_path, "r", encoding="utf-8") as credits_file:
         )
 
 
-async def credits(client: discord.Client,
-                  message: discord.Message,
-                  content: list[str]) -> Optional[discord.Embed]:
+async def credits_command(client: discord.Client,
+                         message: discord.Message,
+                         content: list[str]) -> Optional[discord.Embed]:
+    """Handle the s!credit command."""
+    del client, message, content
     return credits_embed

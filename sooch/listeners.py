@@ -1,15 +1,17 @@
 """Implement listeners for all the events SoochBot cares about."""
 import logging
+from typing import Optional
 
 import discord
 
-from sooch.servers import Server, Servers
+from sooch.services.servers import Server, Servers
 
 
 logger = logging.getLogger("sooch")
+servers: Optional[Servers] = None
 
 
-async def on_guild_join(servers: Servers, guild: discord.Guild):
+async def on_guild_join(guild: discord.Guild):
     """Handle guild joins, adding it to the database as necessary."""
     logger.info(
         "Joined guild %s, checking if we've been here before", guild.name)
@@ -22,11 +24,10 @@ async def on_guild_join(servers: Servers, guild: discord.Guild):
         await servers.add_server(Server(
             guild.id,
             guild.name,
-            "s!"
         ))
 
 
-async def on_ready(client: discord.Client, servers: Servers):
+async def on_ready(client: discord.Client):
     """Setup the bot with latest info from the Discord server."""
     logger.info("Connected to Discord.")
     for guild in client.guilds:
@@ -40,5 +41,4 @@ async def on_ready(client: discord.Client, servers: Servers):
             await servers.add_server(Server(
                 guild.id,
                 guild.name,
-                "s!"
             ))

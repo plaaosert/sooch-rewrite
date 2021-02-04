@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Optional
 
 import discord
-from sooch.commands import misc, help
+from sooch.commands import base, misc, help
 
 
 @dataclass
@@ -30,7 +30,12 @@ commands = {
     "s!credits": Command(
         name="s!credits",
         description="Show all the people that helped make Sooch a reality",
-        handler=misc.credits
+        handler=misc.credits_command
+    ),
+    "s!claim": Command(
+        name="s!claim",
+        description="Claim the hard-made sooch your buildings made",
+        handler=base.claim
     ),
     "s!help": Command(
         name="s!help",

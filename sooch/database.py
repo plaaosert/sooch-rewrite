@@ -52,10 +52,21 @@ class Database:
             """
             CREATE TABLE IF NOT EXISTS `server`(
                 `discord_id` BIGINT PRIMARY KEY,
-                `name` VARCHAR(256),
-                `command_prefix` VARCHAR(32)
+                `name` VARCHAR(256)
             );
+            """,
+            self.get_reg_building_query(),
             """
+            CREATE TABLE IF NOT EXISTS `player` (
+                `discord_id` BIGINT PRIMARY KEY,
+                `sooch_skin` VARCHAR(50),
+                `embed_color` INT,
+                `sooch` DOUBLE PRECISION NOT NULL DEFAULT 0,
+                `tsooch` DOUBLE PRECISION NOT NULL DEFAULT 0,
+                `csooch` DOUBLE PRECISION NOT NULL DEFAULT 0,
+                `last_claim` BIGINT
+            );
+            """,
         ]
         cursor = self.connection.cursor()
         # This is run outside of the migrations since it needs to exist to
@@ -85,3 +96,11 @@ class Database:
                 self.connection.commit()
             else:
                 self.logger.info("Skipping migration %d, already run.", i)
+
+    @staticmethod
+    def get_reg_building_query() -> str:
+        """Generate the layout of the regular building query."""
+        return ("CREATE TABLE IF NOT EXISTS `reg_buildings`("
+                + "    `discord_id` BIGINT PRIMARY KEY,"
+                + ", ".join([f"`b{id}` INT NOT NULL DEFAULT 0" for id in range(1, 51+1)])
+                + ");")
