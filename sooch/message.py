@@ -22,31 +22,42 @@ class Command:
 valid_prefix = {
     "s!": True,
     "s.": True,
-    "s$": True
+    "s$": True,
+    "S!": True,
+    "S.": True,
+    "S$": True
 }
 
 
-commands = {
-    "s!credits": Command(
+commands = [
+    Command(
         name="s!credits",
         description="Show all the people that helped make Sooch a reality",
+        aliases=["s!cr"],
         handler=misc.credits_command
     ),
-    "s!claim": Command(
+    Command(
         name="s!claim",
         description="Claim the hard-made sooch your buildings made",
+        aliases=["s!c"],
         handler=base.claim
     ),
-    "s!help": Command(
+    Command(
         name="s!help",
         description="Get help",
         aliases=["s!h"],
         syntax="s!help <command>",
         handler=help.help_command
-    )
-}
+    ),
+]
 invalid_command = Command(handler=misc.invalid)
 help.populate_help_embeds(commands)
+
+command_lookup: dict[str, Command] = {}
+for cmd in commands:
+    command_lookup[cmd.name] = cmd
+    for alias in cmd.aliases:
+        command_lookup[alias] = cmd
 
 
 async def on_message(client: discord.Client, message: discord.Message):
@@ -70,7 +81,7 @@ async def on_message(client: discord.Client, message: discord.Message):
         pass
 
     content = message.content.split(" ")
-    command = commands.get(content[0], invalid_command)
+    command = command_lookup.get(content[0].lower(), invalid_command)
     to_send = await command.handler(client, message, content)
     if to_send is not None:
         to_send.title = content[0]
