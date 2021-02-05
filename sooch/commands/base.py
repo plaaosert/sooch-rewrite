@@ -39,7 +39,7 @@ async def claim(client: discord.Client,
 
     player = await player_svc.get_player(player_id)
     if player is None:
-        player = setup_default_player(player_id)
+        player = await setup_default_player(player_id)
 
     new_time = int(time.time())
     delta_seconds = new_time - player.last_claim
