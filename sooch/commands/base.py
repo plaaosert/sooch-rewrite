@@ -90,3 +90,63 @@ async def claim(client: discord.Client,
     )
 
     return result
+
+
+async def build(client: discord.Client,
+                message: discord.Message,
+                content: list[str]) -> Optional[discord.Embed]:
+
+    player_id = message.author.id
+    # Get the Sooch player
+    player = await player_svc.get_player(player_id)
+    if not player:
+        player = setup_default_player(player_id)
+
+    # Prepare the embed, in case we want to also include claim information
+    result = discord.Embed()
+
+    new_time = int(time.time())
+    delta_seconds = new_time - player.last_claim
+    # TODO: Claim time acceleration - maybe separate this into its own function?
+    delta_min = math.floor(delta_seconds / 60)
+    # If it's been more than one minute, claim any sooch
+    if delta_min > 0:
+        result = await claim(client, message, content)
+
+    # Get basic player information.
+    old_balance = player.sooch
+    # If there's no building specified to be built
+    if not content[1:]:
+        # TODO: Print building list
+        return result
+    else:
+        # Surround this with a try in case a player tries to access a building that doesn't exist.
+        try:
+            # If searching by numeric ID
+            if content[1].isnumeric():
+                # Add 1 to it so
+                building = buildings.reg_buildings[int(content[1]) - 1]
+            else:
+                building = buildings.reg_building_lookup[content[1]]
+        except IndexError:
+            # TODO: send error message
+            return result
+
+    amount = 1
+    # If an amount has been specified
+    if content[2:] and content[2].isnumeric():
+        amount = int(content[2])
+    # Get the required cost for building the properties
+    building_array = await reg_buildings_svc.get_building_count(player_id)
+    building_amount = building_array[building.id]
+    required_cost = building.get_cost(building_amount, building_amount + amount, 1.0)  # TODO: variable cost reduction
+    # If the player can afford to build the new properties, let them proceed.
+    # If not, tell them they can't afford the property/ies.
+    if player.sooch >= required_cost:
+        # Set the new sooch amount and build count.
+        await player_svc.set_sooch(player_id, player.sooch - required_cost)
+        await reg_buildings_svc.set_building_count(player_id, building.id, building_array[building.id] + amount)
+        return result  # TODO: bought
+    else:
+        return result  # TODO: cannot buy
+
