@@ -95,7 +95,8 @@ async def claim(client: discord.Client,
 async def build(client: discord.Client,
                 message: discord.Message,
                 content: list[str]) -> Optional[discord.Embed]:
-
+    """Handles the s!build command."""
+    # TODO: Plaao said they want to reduce database usage so this may require some review/rewriting.
     player_id = message.author.id
     # Get the Sooch player
     player = await player_svc.get_player(player_id)
