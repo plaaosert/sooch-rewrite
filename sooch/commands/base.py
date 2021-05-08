@@ -106,7 +106,9 @@ async def build(client: discord.Client,
     result = discord.Embed()
 
     # Get basic player information.
+    building_array = await reg_buildings_svc.get_building_count(player_id)
     old_balance = player.sooch
+    old_income = utilities.determine_income(building_array)
     # If there's no building specified to be built
     if not content[1:]:
         result.add_field(
@@ -164,10 +166,10 @@ async def build(client: discord.Client,
     # If an amount has been specified
     if content[2:] and content[2].isnumeric():
         amount = int(content[2])
-    # Get the required cost for building the properties
-    building_array = await reg_buildings_svc.get_building_count(player_id)
+
     building_amount = building_array[building.id]
-    required_cost = building.get_cost(building_amount, building_amount + amount, 1.0)  # TODO: variable cost reduction
+    new_amount = building_amount + amount
+    required_cost = building.get_cost(building_amount, new_amount, 1.0)  # TODO: variable cost reduction
     # If the player can afford to build the new properties, let them proceed.
     # If not, tell them they can't afford the property/ies.
     if player.sooch >= required_cost:
