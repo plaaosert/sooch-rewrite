@@ -215,10 +215,10 @@ async def build(client: discord.Client,
         )
         result.add_field(
             name="Cost",
-            value=f"{utilities.format_balance(required_cost)} <:sooch:804702160217440276> per {property_name}"
+            value=f"{utilities.format_balance(required_cost)} <:sooch:804702160217440276> per {building.name}"
                   f"\n     ▼ ▼ ▼"
                   f"\n{utilities.format_balance(building.get_cost(new_amount, new_amount + 1, 1.0))}"
-                  f" <:sooch:804702160217440276> per {property_name}"
+                  f" <:sooch:804702160217440276> per {building.name}"
         )
         return result
     else:
