@@ -176,7 +176,46 @@ async def build(client: discord.Client,
         # Set the new sooch amount and build count.
         await player_svc.set_sooch(player_id, player.sooch - required_cost)
         await reg_buildings_svc.set_building_count(player_id, building.id, building_array[building.id] + amount)
-        return result  # TODO: bought
+
+        name = "New Propert"
+        property_name = building.name
+        if amount == 1:
+            name += "y"
+        else:
+            name += "ies"
+            property_name += "s"
+
+        new_count = await reg_buildings_svc.get_building_count(player_id)
+        result.add_field(
+            name=name,
+            value=f"Bought {amount} {property_name} for {utilities.format_balance(required_cost)} "
+                  f"<:sooch:804702160217440276>. Income: **{utilities.format_balance(building.income)}** "
+                  f"<:sooch:804702160217440276>/hr",
+            inline=False
+        )
+        result.add_field(
+            name="Income",
+            value=f"{utilities.format_balance(old_income)} <:sooch:804702160217440276>/hr"
+                  f"\n     ▼ ▼ ▼"
+                  f"\n{utilities.format_balance(utilities.determine_income(new_count))}"
+                  f" <:sooch:804702160217440276>/hr",
+            inline=True
+        )
+        result.add_field(
+            name="Balance",
+            value=f"{utilities.format_balance(old_balance)} <:sooch:804702160217440276>"
+                  f"\n     ▼ ▼ ▼"
+                  f"\n{utilities.format_balance(old_balance - required_cost)} <:sooch:804702160217440276>",
+            inline=True
+        )
+        result.add_field(
+            name="Cost",
+            value=f"{utilities.format_balance(required_cost)} <:sooch:804702160217440276> per {property_name}"
+                  f"\n     ▼ ▼ ▼"
+                  f"\n{utilities.format_balance(building.get_cost(new_amount, new_amount + 1, 1.0))}"
+                  f" <:sooch:804702160217440276> per {property_name}"
+        )
+        return result
     else:
         return result  # TODO: cannot buy
 
