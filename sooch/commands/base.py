@@ -221,5 +221,11 @@ async def build(client: discord.Client,
         )
         return result
     else:
-        return result  # TODO: cannot buy
+        result.add_field(
+            name="You cannot afford this!",
+            value=f"You need {utilities.format_balance(required_cost)} <:sooch:804702160217440276>, "
+                  f"but only have {utilities.format_balance(player.sooch)} <:sooch:804702160217440276>.",
+            inline=False
+        )
+        return result
 
