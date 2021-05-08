@@ -158,7 +158,7 @@ async def build(client: discord.Client,
                 # Add 1 to it so
                 building = buildings.reg_buildings[int(content[1]) - 1]
             else:
-                building = buildings.reg_building_lookup[content[1]]
+                building = buildings.reg_building_lookup[content[1].lower()]
         except KeyError or IndexError:
             result.add_field(
                 name="This building doesn't exist.",
