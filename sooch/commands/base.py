@@ -105,21 +105,49 @@ async def build(client: discord.Client,
     # Prepare the embed, in case we want to also include claim information
     result = discord.Embed()
 
-    new_time = int(time.time())
-    delta_seconds = new_time - player.last_claim
-    # TODO: Claim time acceleration - maybe separate this into its own function?
-    delta_min = math.floor(delta_seconds / 60)
-    # If it's been more than one minute, claim any sooch
-    if delta_min > 0:
-        result = await claim(client, message, content)
-
     # Get basic player information.
     old_balance = player.sooch
     # If there's no building specified to be built
     if not content[1:]:
-        # TODO: Print building list
+        result.add_field(
+            name="Balance",
+            value=f"Your current balance is {utilities.format_balance(player.sooch)}.",
+            inline=False
+        )
+        start_search = 0
+        end_search = 5
+        list_count = 1
+        while end_search != -1:
+            value = ""
+            # We'll grab up to 5 buildings at a time.
+            for i in range(start_search, end_search):
+                building = buildings.reg_buildings[i]
+                building_amount = building_array[building.id]
+                # TODO: Also cost reduction
+                building_cost = building.get_cost(building_amount, building_amount + 1, 1.0)
+
+                emote = "<:yes:805476872330543166>"
+                # If the player cannot afford the building, prompt the program to finish searching after that bunch
+                if building_cost > player.sooch:
+                    emote = "<:nope:805476871982153748>"
+                    end_search = -6
+                value += f"{emote} **{i + 1}**) {building.name} - {utilities.format_balance(building_cost)} " \
+                         f"<:sooch:804702160217440276>\n"
+            start_search += 5
+            end_search += 5
+            if end_search >= len(buildings.reg_buildings):
+                end_search = len(buildings.reg_buildings) - 1
+            result.add_field(name=f"Price List {list_count}", value=value, inline=True)
+            list_count += 1
         return result
     else:
+        new_time = int(time.time())
+        delta_seconds = new_time - player.last_claim
+        # TODO: Claim time acceleration - maybe separate this into its own function?
+        delta_min = math.floor(delta_seconds / 60)
+        # If it's been more than one minute, claim any sooch
+        if delta_min > 0:
+            result = await claim(client, message, content)
         # Surround this with a try in case a player tries to access a building that doesn't exist.
         try:
             # If searching by numeric ID
