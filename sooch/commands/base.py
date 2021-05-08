@@ -9,7 +9,7 @@ from typing import Optional
 
 import discord
 
-from sooch import buildings
+from sooch import buildings, utilities
 from sooch.services.players import Player, Players
 from sooch.services.reg_buildings import RegBuildings
 
@@ -72,7 +72,7 @@ async def claim(client: discord.Client,
             name="Claim Results",
             value=("Claimed {} Sooch from a total of "
                    "{} properties after 1 minute.").format(
-                       income, building_count),
+                       utilities.format_balance(income), building_count),
             inline=False
         )
     else:
@@ -80,12 +80,12 @@ async def claim(client: discord.Client,
             name="Claim Results",
             value=("Claimed {} Sooch from a total of "
                    "{} properties after {} minutes.").format(
-                       income, building_count, delta_min),
+                       utilities.format_balance(income), building_count, delta_min),
             inline=False
         )
     result.add_field(
         name="New Balance",
-        value=f"{new_sooch_balance} Sooch",
+        value=f"{utilities.format_balance(new_sooch_balance)} Sooch",
         inline=False
     )
 
