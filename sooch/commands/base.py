@@ -158,8 +158,12 @@ async def build(client: discord.Client,
                 building = buildings.reg_buildings[int(content[1]) - 1]
             else:
                 building = buildings.reg_building_lookup[content[1]]
-        except IndexError:
-            # TODO: send error message
+        except KeyError or IndexError:
+            result.add_field(
+                name="This building doesn't exist.",
+                value=f"Yeah, {content[1]} definitely doesn't exist.",
+                inline=False
+            )
             return result
 
     amount = 1
