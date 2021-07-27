@@ -39,7 +39,7 @@ class Players:
             ("INSERT INTO `player`"
              "(`name`, `discord_id`, `sooch_skin`, `embed_color`,"
              "`sooch`, `tsooch`, `csooch`, `last_claim`)"
-             "VALUES(?, ?, ?, ?, ?, ?, ?)"),
+             "VALUES(?, ?, ?, ?, ?, ?, ?, ?)"),
             (player.name, player.discord_id, player.sooch_skin, player.embed_color,
              player.sooch, player.tsooch, player.csooch, player.last_claim)
         )

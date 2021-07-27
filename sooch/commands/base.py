@@ -44,4 +44,20 @@ async def claim(client: discord.Client,
     result = discord.Embed()
     # Embed here needs to be modular since we have a lot of claim info. Do later todo
 
+    debug_data = (
+        "hours",
+        "spare_mins",
+        "this_claim_mult",
+        "basic_income",
+        "trans_income",
+        "crit_success",
+        "items_gained",
+        "tax_loss",
+        "event_currency"
+    )
+
+    result.add_field(name="Result test", value="```\n" + "\n".join("{:20} {}".format(
+        d + ":", getattr(claim_result, d)
+    ) for d in debug_data) + "\n```")
+
     return result

@@ -2,7 +2,7 @@
 Handles incoming messages and dispatches them to the appropriate handler.
 """
 from dataclasses import dataclass, field
-from typing import Callable, Optional, List, Dict, Coroutine
+from typing import Callable, Optional, List, Dict, Coroutine, Any
 
 import discord
 from sooch.commands import base, misc, help
@@ -12,11 +12,11 @@ from sooch.commands import base, misc, help
 class Command:
     """Class representing a command that can be executed."""
     handler: Callable[[discord.Client, discord.Message, List[str]],
-                      Coroutine[Optional[discord.Embed]]]
+                      Coroutine[Any, Any, Optional[discord.Embed]]]
     name: str = "s!invalid"
     description: str = "No description provided"
     syntax: Optional[str] = None
-    aliases: List[str] = field(default_factory=List[str])
+    aliases: List[str] = field(default_factory=list)
 
 
 valid_prefix = {

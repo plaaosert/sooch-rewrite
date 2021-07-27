@@ -26,8 +26,9 @@ class ClaimResult:
 
 def determine_times(player: sooch.player.Player):
     # Get base difference (in seconds) from the last stored claim time. Multiply by time acceleration.
-    base_diff = time.time() - player.last_claim_time
-    diff = base_diff * player.time_mult
+    base_diff = time.time() - player.last_claim
+    # diff = base_diff * player.time_mult TODO add calculated stats like this
+    diff = base_diff
 
     minutes = diff // 60
     hours = minutes // 60

@@ -59,6 +59,7 @@ class Database:
             """
             CREATE TABLE IF NOT EXISTS `player` (
                 `discord_id` BIGINT PRIMARY KEY,
+                `name` VARCHAR(32),
                 `sooch_skin` VARCHAR(50),
                 `embed_color` INT,
                 `sooch` DOUBLE PRECISION NOT NULL DEFAULT 0,
