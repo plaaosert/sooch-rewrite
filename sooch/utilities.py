@@ -1,6 +1,8 @@
 """
 A class to store all utilities which may be reused several times within the code.
 """
+from typing import Tuple
+
 from sooch import buildings
 
 
@@ -13,13 +15,16 @@ def format_balance(bal: float) -> str:
     :param bal: the decimal itself.
     :return: the formatted decimal as a string.
     """
+
+    # This should support arbitrary usage of different function code -
+    # like how sooch original had 12 different formatting methods
     if bal > 1.00e+10:
         return '{:.2e}'.format(bal)
     else:
         return '{:,}'.format(bal)
 
 
-def determine_income(count: tuple[int]) -> float:
+def determine_income(count: Tuple[int]) -> float:
     """
     Used to determine a user's income from their building counts.
     :param count: The tuple of building counts.

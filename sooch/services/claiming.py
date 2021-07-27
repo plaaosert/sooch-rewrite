@@ -3,6 +3,7 @@ Logic for claiming. Claiming is done by a series of "claim events" called in seq
 """
 import time
 from dataclasses import dataclass
+import sooch.player
 
 
 @dataclass
@@ -23,7 +24,7 @@ class ClaimResult:
     event_currency = None
 
 
-def determine_times(player):
+def determine_times(player: sooch.player.Player):
     # Get base difference (in seconds) from the last stored claim time. Multiply by time acceleration.
     base_diff = time.time() - player.last_claim_time
     diff = base_diff * player.time_mult
@@ -88,7 +89,7 @@ def claim_items(result, player, hours_real, minutes_real):
     pass
 
 
-def claim_all(player):
+def claim_all(player: sooch.player.Player):
     hours, hours_real, minutes, minutes_real = determine_times(player)
 
     result = ClaimResult()
@@ -111,7 +112,7 @@ def claim_all(player):
     # ???????????????????
 
     # Claiming can increase XP which can give a bonus to income, so we need to recalculate income here.
-    player.calclate_income()
+    player.calculate_income()
 
     # Return everything.
     return result

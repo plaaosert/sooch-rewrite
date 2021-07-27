@@ -1,7 +1,7 @@
 """Contain models for the amount of regular buildings players own."""
+from typing import List, Tuple
 
-
-set_query: list[str] = []
+set_query: List[str] = []
 for set_building_id in range(1, 51+1):
     set_query.append(
         f"INSERT INTO `reg_buildings`(`discord_id`, `b{set_building_id}`) "
@@ -16,7 +16,7 @@ class RegBuildings:
     def __init__(self, database):
         self.database = database
 
-    async def get_building_count(self, discord_id: int) -> tuple[int, ...]:
+    async def get_building_count(self, discord_id: int) -> Tuple[int, ...]:
         """Return the amount of buildings the player with the ID has."""
         cursor = self.database.connection.cursor()
         cursor.execute(

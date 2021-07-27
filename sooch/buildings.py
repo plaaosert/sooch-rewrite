@@ -4,7 +4,7 @@ Every building type is stored in a different list but their classes all inherit
 from BaseBuilding.
 """
 import math
-from typing import Optional
+from typing import Optional, List, Dict
 
 
 class BaseBuilding:
@@ -12,6 +12,8 @@ class BaseBuilding:
     base_cost_amp = 0  # 0.0x increase is equivalent to "no increase"
 
     def __init__(self, name, cost, cost_amp=None):
+        # BaseBuilding objects don't have IDs because they are abstract.
+        self.id = -1
         self.name = name
         self.cost = int(cost)
         # Some buildings may have steeper cost scaling than others of its type
@@ -115,7 +117,7 @@ class TransBuilding(BaseBuilding):
         self.build_limit = build_limit
 
 
-def populate_lookup(original: list[BaseBuilding]) -> dict[str, BaseBuilding]:
+def populate_lookup(original: List[BaseBuilding]) -> Dict[str, BaseBuilding]:
     """
     Set up the lookup table for a list of buildings.
     Keys in the lookup table include:

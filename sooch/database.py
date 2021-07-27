@@ -102,5 +102,5 @@ class Database:
         """Generate the layout of the regular building query."""
         return ("CREATE TABLE IF NOT EXISTS `reg_buildings`("
                 + "    `discord_id` BIGINT PRIMARY KEY,"
-                + ", ".join([f"`b{id}` INT NOT NULL DEFAULT 0" for id in range(1, 51+1)])
+                + ", ".join([f"`b{building_id}` INT NOT NULL DEFAULT 0" for building_id in range(1, 51+1)])
                 + ");")

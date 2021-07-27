@@ -17,7 +17,7 @@ class Players:
         cursor = self.database.connection.cursor()
         cursor.execute(
             ("SELECT"
-             "`sooch_skin`, `embed_color`,"
+             "`discord_id`, `name`,`sooch_skin`, `embed_color`,"
              "`sooch`, `tsooch`, `csooch`,"
              "`last_claim`"
              "FROM `player` WHERE `discord_id` = ?"),
@@ -29,8 +29,7 @@ class Players:
             return None
 
         return Player(
-            discord_id,
-            row[0], row[1], row[2], row[3], row[4], row[5],
+            (row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
         )
 
     async def add_player(self, player: "Player"):
@@ -38,17 +37,17 @@ class Players:
         cursor = self.database.connection.cursor()
         cursor.execute(
             ("INSERT INTO `player`"
-             "(`discord_id`, `sooch_skin`, `embed_color`,"
+             "(`name`, `discord_id`, `sooch_skin`, `embed_color`,"
              "`sooch`, `tsooch`, `csooch`, `last_claim`)"
              "VALUES(?, ?, ?, ?, ?, ?, ?)"),
-            (player.discord_id, player.sooch_skin, player.embed_color,
+            (player.name, player.discord_id, player.sooch_skin, player.embed_color,
              player.sooch, player.tsooch, player.csooch, player.last_claim)
         )
         self.database.connection.commit()
 
-    # We can't really use these. Doing multiple commits like this is very expensive.
+    # We can't really use these. Doing multiple calls to the DB like this is very expensive.
     # I would prefer functions inside Player to mutate attribute values and a final save function here that commits
-    # everything in a single bulk commit.
+    # everything in a single bulk save.
     # -plaao
 
     #async def set_sooch_skin(self, discord_id: int, sooch_skin: str):

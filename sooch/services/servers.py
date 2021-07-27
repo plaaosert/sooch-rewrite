@@ -3,6 +3,7 @@ Contain models for server-specific information such as its name and
 server boosts.
 """
 from dataclasses import dataclass
+from typing import Optional
 
 
 class Servers:
@@ -11,7 +12,7 @@ class Servers:
     def __init__(self, database):
         self.database = database
 
-    async def get_server(self, discord_id: int) -> "Server":
+    async def get_server(self, discord_id: int) -> Optional["Server"]:
         """Return the server info associated with the ID requested"""
         cursor = self.database.connection.cursor()
         cursor.execute(

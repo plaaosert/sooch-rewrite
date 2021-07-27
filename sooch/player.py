@@ -1,4 +1,5 @@
 """Contain class and method that allows for manipulation of player data."""
+import time
 from typing import Tuple
 
 
@@ -17,8 +18,11 @@ class Player:
     updated income amounts and updating the leaderboard.
     """
 
-    def __init__(self, data: Tuple[int, str, ...], initialise=False):
-        self.pid = data[0]
+    # Need to have some sort of type hint for "Tuple[int, str, ...]" - but I don't know how to make that type hint,
+    # like, work.
+    # - plaao
+    def __init__(self, data: Tuple, initialise=False):
+        self.discord_id = data[0]
         self.name = data[1]
 
         # Further initialise all variables here as they are needed
@@ -28,13 +32,22 @@ class Player:
         # be initialised using constants.
         if initialise:
             # Initialise the data.
-            pass
+            self.sooch_skin = ""
+            self.embed_color = None
+            self.sooch = 10
+            self.tsooch = 0
+            self.csooch = 0
+            self.last_claim = time.time()
         else:
             # Read from the provided data.
-
             # We need to always read buildings and skills (because we need to calculate income)
             # Probably just use a left join in the original query when we get round to that.
-            pass
+            self.sooch_skin = data[2]
+            self.embed_color = data[3]
+            self.sooch = data[4]
+            self.tsooch = data[5]
+            self.csooch = data[6]
+            self.last_claim = data[7]
 
     @classmethod
     def from_loaded_data(cls, data):
@@ -56,7 +69,7 @@ class Player:
         # Mostly concerned with temp buffs and bonuses from t/cprops.
         # Nothing to do here... yet.
 
-    def calclate_income(self):
+    def calculate_income(self):
         """
         Update player currency income values based on their income bonus. Call this after calculate_all_stats
         and after doing any command that modifies player.

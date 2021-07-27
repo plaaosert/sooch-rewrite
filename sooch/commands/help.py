@@ -2,15 +2,15 @@
 Module that contains command that provide information on how to progress to
 the player.
 """
-from typing import Optional
+from typing import Optional, List, Dict
 
 import discord
 
 # Preload all help embeds
-help_embeds: dict[str, discord.Embed] = {}
+help_embeds: Dict[str, discord.Embed] = {}
 
 
-def populate_help_embeds(commands: list[any]):
+def populate_help_embeds(commands: List[any]):
     """Populate the help embed cache with the provided list of commands."""
     default_text = ""
 
@@ -41,7 +41,7 @@ def populate_help_embeds(commands: list[any]):
 
 async def help_command(client: discord.Client,
                        message: discord.Message,
-                       content: list[str]) -> Optional[discord.Embed]:
+                       content: List[str]) -> Optional[discord.Embed]:
     """Handle the s!help command."""
     del client, message
 

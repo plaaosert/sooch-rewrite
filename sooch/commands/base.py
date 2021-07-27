@@ -5,7 +5,7 @@ start of the game and necessary for progression.
 """
 import math
 import time
-from typing import Optional
+from typing import Optional, List
 
 import discord
 
@@ -29,7 +29,7 @@ async def setup_default_player(discord_id: int, discord_name: str) -> Player:
 
 async def claim(client: discord.Client,
                 message: discord.Message,
-                content: list[str]) -> Optional[discord.Embed]:
+                content: List[str]) -> Optional[discord.Embed]:
     """Handle the s!claim command."""
     del client, content
     player_id = message.author.id
