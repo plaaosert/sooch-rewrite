@@ -5,7 +5,7 @@ set_query: list[str] = []
 for set_building_id in range(1, 51+1):
     set_query.append(
         f"INSERT INTO `reg_buildings`(`discord_id`, `b{set_building_id}`) "
-        f"VALUES (?, ?) ON CONFLICT(`discord_id`) DO "
+        f"VALUES (?, ?) ON CONFLICT DO "
         f"UPDATE SET `b{set_building_id}` = ? WHERE `discord_id`=?"
     )
 

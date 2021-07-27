@@ -49,13 +49,6 @@ commands = [
         syntax="s!help <command>",
         handler=help.help_command
     ),
-    Command(
-        name="s!build",
-        description="Build a property which increases your income",
-        aliases=["s!b"],
-        syntax="s!build <Building> [Amount]",
-        handler=base.build
-    )
 ]
 invalid_command = Command(handler=misc.invalid)
 help.populate_help_embeds(commands)

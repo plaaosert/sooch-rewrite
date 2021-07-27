@@ -15,7 +15,7 @@ import discord
 from sooch import listeners, message, path
 from sooch.commands import base
 from sooch.database import Database
-from sooch.services.players import Players
+from sooch.services.players_load import Players
 from sooch.services.reg_buildings import RegBuildings
 from sooch.services.servers import Servers
 

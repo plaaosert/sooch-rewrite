@@ -81,7 +81,7 @@ class RegBuilding(BaseBuilding):
     building_type = "Sooch"
 
     def __init__(self,
-                 name: str, cost: int, income: int,
+                 name: str, cost: float, income: float,
                  cost_amp: Optional[float] = None):
         # Apply ID for the building object and increment it
         self.id = self.__class__.id_inc
