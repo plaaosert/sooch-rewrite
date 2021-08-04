@@ -40,6 +40,9 @@ def determine_times(player: sooch.player.Player):
 
 
 def claim_basic(result, player, hours, minutes):
+    # Need buildings.
+
+
     pass
 
 

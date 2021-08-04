@@ -28,9 +28,13 @@ class Players:
         if row is None:
             return None
 
-        return Player(
-            (row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
+        player_load = Player(
+            self, (row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
         )
+
+        await player_load.calculate_all_stats()
+
+        return player_load
 
     async def add_player(self, player: "Player"):
         """Add the provided player into the database"""

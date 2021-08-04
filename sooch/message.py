@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Optional, List, Dict, Coroutine, Any
 
 import discord
-from sooch.commands import base, misc, help
+from sooch.commands import base, misc, help, admin
 
 
 @dataclass
@@ -49,6 +49,13 @@ commands = [
         syntax="s!help <command>",
         handler=help.help_command
     ),
+    Command(
+        name="s$setbuilding",
+        description="Set a building ID to amount given",
+        aliases=["s$sb"],
+        syntax="s$setbuilding <buildingID> <amount>",
+        handler=admin.set_building
+    )
 ]
 invalid_command = Command(handler=misc.invalid)
 help.populate_help_embeds(commands)
